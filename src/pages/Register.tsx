@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { Layers, AlertTriangle } from 'lucide-react';
 
 import { AUTH_URL } from '../config';
 
@@ -38,35 +39,33 @@ export default function Register() {
 
       {/* ── Brand Panel (desktop only) ─────────────────── */}
       <div className="hidden lg:flex flex-col relative overflow-hidden w-[440px] xl:w-[500px] shrink-0"
-           style={{ background: 'linear-gradient(145deg, #a9583e 0%, #cc785c 50%, #e8a55a 100%)' }}>
+           style={{ background: '#0a0b0d' }}>
 
-        <div className="ambient-orb w-[460px] h-[460px] bg-white/8 -top-28 -left-28" style={{ animationDelay: '0s' }} />
-        <div className="ambient-orb w-56 h-56 bg-primary/15 bottom-20 right-0" style={{ animationDelay: '-5s' }} />
+        <div className="ambient-orb w-[460px] h-[460px] bg-[#0052ff]/8 -top-28 -left-28" style={{ animationDelay: '0s' }} />
+        <div className="ambient-orb w-56 h-56 bg-primary/10 bottom-20 right-0" style={{ animationDelay: '-5s' }} />
 
         {/* Logo */}
         <div className="relative z-10 flex items-center gap-3 px-12 pt-10">
-          <div className="w-9 h-9 rounded-xl bg-white/20 border border-white/25 flex items-center justify-center backdrop-blur-sm">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                 strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-white">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
+          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
           </div>
           <span className="text-white font-semibold text-[15px] tracking-tight">Sir. Platform</span>
         </div>
 
         <div className="relative z-10 mt-auto px-12 pb-10">
-          <h2 className="text-white text-[2rem] font-bold leading-[1.2] tracking-tight mb-4">
+          <h2 className="text-white text-[2rem] font-medium leading-[1.2] tracking-tight mb-4 font-sans" style={{ letterSpacing: '-0.8px' }}>
             Start with a clean<br />document workspace.
           </h2>
           <p className="text-white/60 text-[0.9375rem] leading-relaxed max-w-[280px]">
             Create an account for focused writing, asset management, and PDF review.
           </p>
-          <p className="text-white/35 text-xs mt-10">Private beta · Secure document operations</p>
+          <p className="text-white/30 text-xs mt-10">Private beta · Secure document operations</p>
         </div>
       </div>
 
       {/* ── Form Panel ─────────────────────────────────── */}
-      <div className="flex-1 flex items-center justify-center p-8 relative overflow-hidden">
+      <div className="flex-1 flex items-center justify-center p-8 relative overflow-hidden"
+           style={{ background: 'var(--canvas)' }}>
         <div className="absolute top-4 right-4 z-20">
           <ThemeToggle />
         </div>
@@ -78,30 +77,24 @@ export default function Register() {
 
           {/* Logo — mobile only */}
           <div className="flex items-center gap-3 mb-10 lg:hidden">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/15">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                   strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-white">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
+            <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/15">
+              <Layers className="w-5 h-5 text-white" />
             </div>
-            <span className="font-semibold text-slate-800 text-[15px]">Sir. Platform</span>
+            <span className="font-semibold text-slate-800 text-[15px]" style={{ color: 'var(--ink-1)' }}>Sir. Platform</span>
           </div>
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="text-[1.875rem] font-bold tracking-tight text-slate-800 mb-1.5 leading-tight">
+            <h1 className="text-[1.875rem] font-medium tracking-tight text-slate-800 mb-1.5 leading-tight font-sans" style={{ color: 'var(--ink-1)', letterSpacing: '-0.5px' }}>
               Create account
             </h1>
-            <p className="text-slate-500 text-[0.9375rem]">Set up access to your LaTeX workspace.</p>
+            <p className="text-slate-500 text-[0.9375rem]" style={{ color: 'var(--ink-3)' }}>Set up access to your LaTeX workspace.</p>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="neo-alert-error flex items-start gap-3 p-4 rounded-xl mb-6 text-sm">
-              <svg className="w-4 h-4 shrink-0 mt-px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+            <div className="neo-alert-error flex items-start gap-3 p-4 rounded-[12px] mb-6 text-sm">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-px" />
               <span>{error}</span>
             </div>
           )}
@@ -141,14 +134,14 @@ export default function Register() {
               </div>
             ) : (
               <button type="submit"
-                className="neo-btn neo-btn-primary w-full h-12 rounded-xl text-[0.9375rem] font-semibold mt-1">
+                className="neo-btn neo-btn-primary w-full h-12 rounded-full text-[0.9375rem] font-semibold mt-1">
                 Create account
               </button>
             )}
           </form>
 
-          <div className="mt-8 pt-6 border-t border-slate-200/70 text-center">
-            <p className="text-slate-500 text-sm">
+          <div className="mt-8 pt-6 border-t border-slate-200/70 text-center" style={{ borderColor: 'var(--hairline)' }}>
+            <p className="text-slate-500 text-sm" style={{ color: 'var(--ink-3)' }}>
               Already have an account?{' '}
               <Link to="/" className="neo-link">Sign in</Link>
             </p>

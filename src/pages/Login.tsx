@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { Layers, AlertTriangle, Check, LogIn } from 'lucide-react';
 import { AUTH_URL, CLIENT_ID, CLIENT_SECRET } from '../config';
 
 export default function Login() {
@@ -12,7 +13,10 @@ export default function Login() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (accessToken) { navigate('/dashboard', { replace: true }); return; }
+    if (accessToken) {
+      navigate('/dashboard', { replace: true });
+      return;
+    }
 
     const errorParam = searchParams.get('error');
     if (errorParam) {
@@ -28,7 +32,10 @@ export default function Login() {
       setLoading(true);
       exchangeToken(code)
         .then(() => navigate('/dashboard', { replace: true }))
-        .catch((err) => { setError(err.message); setSearchParams({}); })
+        .catch((err) => {
+          setError(err.message);
+          setSearchParams({});
+        })
         .finally(() => setLoading(false));
     }
   }, [accessToken, searchParams, navigate, setSearchParams]);
@@ -41,6 +48,7 @@ export default function Login() {
     formData.append('client_id', CLIENT_ID);
     formData.append('client_secret', CLIENT_SECRET);
     formData.append('redirect_uri', redirectUri);
+
     const res = await fetch(`${AUTH_URL}/oauth/token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -57,145 +65,105 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--page-bg)' }}>
-
-      {/* ── Left — Dark product panel ─────────────── */}
-      <div className="hidden lg:flex flex-col w-[460px] xl:w-[520px] shrink-0 relative overflow-hidden"
-           style={{ background: '#141210' }}>
-
-        {/* Subtle coral glow top-right */}
-        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full"
-             style={{ background: 'radial-gradient(circle, rgba(204,120,92,.18) 0%, transparent 70%)' }} />
-        {/* Amber glow bottom-left */}
-        <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full"
-             style={{ background: 'radial-gradient(circle, rgba(232,165,90,.12) 0%, transparent 70%)' }} />
-
-        {/* Logo */}
-        <div className="relative z-10 flex items-center gap-3 px-12 pt-12">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                 strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-white">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
+    <div className="min-h-screen flex flex-col justify-between" style={{ background: 'var(--canvas)' }}>
+      
+      {/* Header bar */}
+      <header className="w-full h-16 border-b border-[#dee1e6] flex items-center justify-between px-6 md:px-12 bg-white">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-[#0052ff] flex items-center justify-center text-white shadow-sm">
+            <Layers className="w-4 h-4" />
           </div>
-          <span className="text-white/90 font-semibold text-[15px] tracking-tight">Sir. Platform</span>
+          <span className="text-xl font-bold tracking-tight text-[#0a0b0d]">SIR</span>
         </div>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+        </div>
+      </header>
 
-        {/* Hero text */}
-        <div className="relative z-10 mt-auto px-12 pb-14">
-          <h2 className="text-white leading-[1.12] mb-5"
-              style={{ fontFamily: '"Cormorant Garamond","EB Garamond",Georgia,serif', fontSize: '2.375rem', fontWeight: 400, letterSpacing: '-0.5px' }}>
-            A precise workspace<br />for serious documents.
-          </h2>
-          <p className="mb-10 leading-relaxed max-w-[300px]"
-             style={{ color: 'rgba(250,249,245,.50)', fontSize: '0.9375rem' }}>
-            Write LaTeX, manage files, and review compiled PDFs — in one calm editorial workspace.
-          </p>
+      {/* Main card panel */}
+      <main className="flex-grow flex items-center justify-center px-6 py-12 bg-[#f7f7f7]">
+        <div className="w-full max-w-[460px] bg-white border border-[#dee1e6] rounded-[24px] p-8 md:p-10 shadow-[0_4px_12px_rgba(0,0,0,0.02)] fade-up">
+          
+          {/* Logo & Headline */}
+          <div className="text-center md:text-left mb-8">
+            <div className="w-12 h-12 rounded-full bg-[#0052ff] flex items-center justify-center text-white mb-6 mx-auto md:mx-0 shadow-md">
+              <Layers className="w-6 h-6" />
+            </div>
+            <h1 className="text-3xl font-semibold tracking-tight text-[#0a0b0d] mb-2 font-sans" style={{ letterSpacing: '-0.8px' }}>
+              Sign in to Sir
+            </h1>
+            <p className="text-[#5b616e] text-sm leading-relaxed">
+              Open your LaTeX workspace and manage serious documents in a clean editorial environment.
+            </p>
+          </div>
 
-          <div className="flex flex-col gap-3.5">
+          {/* Error Alert */}
+          {error && (
+            <div className="w-full p-4 mb-6 rounded-[12px] bg-[#cf202f]/5 border border-[#cf202f]/20 text-[#cf202f] text-sm flex items-start gap-3 text-left">
+              <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Feature List (Institutional-grade Card) */}
+          <div className="bg-[#f7f7f7] rounded-[16px] p-5 mb-8 flex flex-col gap-4 border border-[#eef0f3]">
             {[
               'LuaLaTeX compilation from the browser',
               'Document, asset, and PDF management',
               'Secure OAuth access for every session',
             ].map(f => (
-              <div key={f} className="flex items-center gap-3">
-                <div className="w-4 h-4 rounded-full border border-primary/60 flex items-center justify-center shrink-0">
-                  <svg className="w-2 h-2 text-primary" fill="currentColor" viewBox="0 0 8 8">
-                    <path d="M1 4l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                  </svg>
+              <div key={f} className="flex items-start gap-3">
+                <div className="w-5 h-5 rounded-full bg-[#0052ff]/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <Check className="w-3 h-3 text-[#0052ff]" strokeWidth={3} />
                 </div>
-                <span style={{ color: 'rgba(250,249,245,.55)', fontSize: '0.875rem' }}>{f}</span>
+                <span className="text-xs font-medium text-[#5b616e]">{f}</span>
               </div>
             ))}
           </div>
 
-          <div className="mt-12 pt-8 border-t" style={{ borderColor: 'rgba(250,249,245,.08)' }}>
-            <p style={{ color: 'rgba(250,249,245,.25)', fontSize: '0.75rem' }}>
-              Private beta · Secure document operations
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Right — Cream form panel ──────────────── */}
-      <div className="flex-1 flex items-center justify-center p-8 relative"
-           style={{ background: 'var(--canvas)' }}>
-
-        <div className="absolute top-4 right-4 z-20">
-          <ThemeToggle />
-        </div>
-
-        <div className="w-full max-w-[360px] fade-up">
-
-          {/* Mobile logo */}
-          <div className="flex items-center gap-3 mb-12 lg:hidden">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                   strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-white">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <span className="font-semibold text-[15px]" style={{ color: 'var(--ink-1)' }}>Sir. Platform</span>
-          </div>
-
-          {/* Heading */}
-          <div className="mb-8">
-            <h1 className="mb-1.5" style={{
-              fontFamily: '"Cormorant Garamond","EB Garamond",Georgia,serif',
-              fontSize: '2rem', fontWeight: 400, letterSpacing: '-0.3px', color: 'var(--ink-1)', lineHeight: 1.15
-            }}>
-              Welcome back
-            </h1>
-            <p style={{ color: 'var(--ink-3)', fontSize: '0.9375rem' }}>
-              Open your LaTeX workspace.
-            </p>
-          </div>
-
-          {/* Error */}
-          {error && (
-            <div className="neo-alert-error flex items-start gap-3 p-4 mb-6 text-sm">
-              <svg className="w-4 h-4 shrink-0 mt-px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span>{error}</span>
-            </div>
-          )}
-
+          {/* Action Buttons */}
           {loading ? (
-            <div className="flex flex-col items-center gap-3 py-12">
-              <div className="w-7 h-7 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-              <p style={{ color: 'var(--ink-4)', fontSize: '0.875rem' }}>Establishing connection...</p>
+            <div className="flex flex-col items-center gap-3 py-6">
+              <div className="w-8 h-8 rounded-full border-2 border-[#0052ff] border-t-transparent animate-spin" />
+              <p className="text-[#7c828a] text-sm">Establishing connection...</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4">
               <button onClick={handleLogin}
-                className="neo-btn neo-btn-primary w-full h-12 rounded-xl text-[0.9375rem] font-semibold gap-2.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                </svg>
+                className="w-full h-12 bg-[#0052ff] hover:bg-[#003ecc] text-white font-semibold rounded-full transition-all text-sm shadow-sm flex items-center justify-center gap-2">
+                <LogIn className="w-4 h-4" />
                 Continue to Sir
               </button>
 
               <div className="flex items-center gap-3 my-1">
-                <div className="flex-1 h-px" style={{ background: 'var(--hairline)' }} />
-                <span style={{ color: 'var(--ink-4)', fontSize: '0.75rem', fontWeight: 500 }}>or</span>
-                <div className="flex-1 h-px" style={{ background: 'var(--hairline)' }} />
+                <div className="flex-1 h-px bg-[#dee1e6]" />
+                <span className="text-[#a8acb3] text-xs font-medium uppercase tracking-wider">or</span>
+                <div className="flex-1 h-px bg-[#dee1e6]" />
               </div>
 
               <button onClick={() => navigate('/register')}
-                className="neo-btn neo-btn-soft w-full h-11 rounded-xl text-[0.9375rem]">
+                className="w-full h-12 border border-[#dee1e6] hover:bg-[#f7f7f7] text-[#0a0b0d] font-semibold rounded-full transition-all text-sm flex items-center justify-center bg-white">
                 Create a new account
               </button>
             </div>
           )}
 
-          <p className="mt-10 text-center" style={{ color: 'var(--ink-4)', fontSize: '0.75rem' }}>
-            Sir. Platform · OAuth protected
-          </p>
         </div>
-      </div>
+      </main>
+
+      {/* Footer bar */}
+      <footer className="w-full py-6 border-t border-[#dee1e6] flex flex-col md:flex-row items-center justify-between px-6 md:px-12 bg-white text-xs text-[#7c828a] gap-4">
+        <div className="flex items-center gap-4">
+          <span>© 2026 SIR Labs</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#dee1e6]"></span>
+          <span>Regulated and Secured</span>
+        </div>
+        <div className="flex gap-6">
+          <a href="#" className="hover:text-[#0052ff] transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-[#0052ff] transition-colors">Terms of Service</a>
+        </div>
+      </footer>
+
     </div>
   );
 }

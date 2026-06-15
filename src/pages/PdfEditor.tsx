@@ -1532,8 +1532,8 @@ export default function PdfEditor() {
             </div>
             <div className="text-center">
               <h2 style={{
-                fontFamily: '"Cormorant Garamond","EB Garamond",Georgia,serif',
-                fontSize: '1.875rem', fontWeight: 400, letterSpacing: '-0.3px',
+                fontFamily: 'Inter, -apple-system, sans-serif',
+                fontSize: '1.875rem', fontWeight: 500, letterSpacing: '-0.5px',
                 color: 'var(--ink-1)', lineHeight: 1.15, marginBottom: '0.5rem',
               }}>
                 Open a PDF document
